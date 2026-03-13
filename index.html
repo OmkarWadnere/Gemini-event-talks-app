@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Talks Today</title>
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        .search-container {
+            margin-bottom: 30px;
+        }
+        #category-search {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .schedule-item {
+            background-color: #fff;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .schedule-item:hover {
+            transform: translateY(-5px);
+        }
+        .time-slot {
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .talk-details {
+            padding: 20px;
+        }
+        .talk-details h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .talk-meta {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        .talk-meta span {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .talk-categories {
+            margin-bottom: 15px;
+        }
+        .category-tag {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            border: 1px solid var(--primary-color);
+        }
+        .description {
+            color: #666;
+        }
+        .break-item {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            color: #666;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tech Talks Today</h1>
+            <p>A one-day virtual event for the tech community.</p>
+        </header>
+
+        <main>
+            <div class="search-container">
+                <input type="text" id="category-search" placeholder="Filter by category (e.g., AI, Cloud, JavaScript)...">
+            </div>
+            <div class="schedule-container" id="schedule-container">
+                <!-- Schedule will be rendered here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const talks = [
+            {
+                "title": "The Future of AI: Trends and Predictions",
+                "speakers": ["Dr. Evelyn Reed"],
+                "categories": ["AI", "Machine Learning", "Future Tech"],
+                "description": "A deep dive into the upcoming trends in Artificial Intelligence and what we can expect in the next decade."
+            },
+            {
+                "title": "Building Scalable Applications with Microservices",
+                "speakers": ["John Smith", "Jane Doe"],
+                "categories": ["Architecture", "Cloud", "Backend"],
+                "description": "Learn the principles of microservice architecture and how to build and deploy scalable, resilient applications."
+            },
+            {
+                "title": "Modern JavaScript: Beyond the Basics",
+                "speakers": ["Alex Ray"],
+                "categories": ["JavaScript", "Frontend", "Web Development"],
+                "description": "Explore the powerful features of modern JavaScript (ES2022+) and learn how to write cleaner, more efficient code."
+            },
+            {
+                "title": "DevOps Culture: Breaking Down Silos",
+                "speakers": ["Maria Garcia"],
+                "categories": ["DevOps", "Culture", "Agile"],
+                "description": "An exploration of how to foster a collaborative DevOps culture within your organization to improve workflows and delivery speed."
+            },
+            {
+                "title": "The Quantum Computing Enigma",
+                "speakers": ["Dr. Ben Carter"],
+                "categories": ["Quantum Computing", "Future Tech", "Science"],
+                "description": "An accessible introduction to the world of quantum computing, its potential, and the challenges it faces."
+            },
+            {
+                "title": "Securing the Cloud: A Practical Guide",
+                "speakers": ["Li Wei", "Chris Taylor"],
+                "categories": ["Security", "Cloud", "Cybersecurity"],
+                "description": "Practical tips and strategies for securing your cloud infrastructure against common and advanced threats."
+            }
+        ];
+
+        function renderSchedule() {
+            const scheduleContainer = document.getElementById('schedule-container');
+            const schedule = [
+                { time: "10:00 - 11:00", talkIndex: 0 },
+                { time: "11:00 - 11:10", type: 'break', name: 'Transition Break' },
+                { time: "11:10 - 12:10", talkIndex: 1 },
+                { time: "12:10 - 12:20", type: 'break', name: 'Transition Break' },
+                { time: "12:20 - 13:20", talkIndex: 2 },
+                { time: "13:20 - 14:20", type: 'break', name: 'Lunch Break' },
+                { time: "14:20 - 15:20", talkIndex: 3 },
+                { time: "15:20 - 15:30", type: 'break', name: 'Transition Break' },
+                { time: "15:30 - 16:30", talkIndex: 4 },
+                { time: "16:30 - 16:40", type: 'break', name: 'Transition Break' },
+                { time: "16:40 - 17:40", talkIndex: 5 }
+            ];
+
+            let html = '';
+            schedule.forEach(item => {
+                if (item.type === 'break') {
+                    html += `
+                        <div class="break-item">
+                            <div class="time-slot">${item.time}</div>
+                            <div class="talk-details">${item.name}</div>
+                        </div>
+                    `;
+                } else {
+                    const talk = talks[item.talkIndex];
+                    const categoriesStr = talk.categories.join(',').toLowerCase();
+                    html += `
+                        <div class="schedule-item" data-categories="${categoriesStr}">
+                            <div class="time-slot">${item.time}</div>
+                            <div class="talk-details">
+                                <h3>${talk.title}</h3>
+                                <div class="talk-meta">
+                                    <span><strong>By:</strong> ${talk.speakers.join(', ')}</span>
+                                </div>
+                                <div class="talk-categories">
+                                    ${talk.categories.map(cat => `<span class="category-tag">${cat}</span>`).join('')}
+                                </div>
+                                <p class="description">${talk.description}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            scheduleContainer.innerHTML = html;
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('category-search');
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase().trim();
+                const talkElements = document.querySelectorAll('.schedule-item');
+
+                talkElements.forEach(talkEl => {
+                    const categories = talkEl.dataset.categories;
+                    if (!searchTerm || categories.includes(searchTerm)) {
+                        talkEl.classList.remove('hidden');
+                    } else {
+                        talkEl.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSchedule();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
